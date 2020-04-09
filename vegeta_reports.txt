@@ -1,0 +1,13 @@
+echo "GET http://localhost:8080/api/id
+      GET http://localhost:9000/api/id
+      GET http://localhost:9001/api/id" >> target.list
+
+vegeta attack -duration=1s -rate=1000 -targets=target.list | tee results.bin | vegeta report
+
+Requests      [total, rate, throughput]         1000, 1000.99, 1000.62
+Duration      [total, attack, wait]             999.376ms, 999.013ms, 363.263µs
+Latencies     [min, mean, 50, 90, 95, 99, max]  224.673µs, 290.645µs, 266.777µs, 319.804µs, 359.041µs, 646.493µs, 3.925ms
+Bytes In      [total, mean]                     24000, 24.00
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:1000
