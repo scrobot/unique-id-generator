@@ -16,12 +16,9 @@ class IdGeneratorServiceImpl(
 
     private val maxSequence = (2.0.pow(SEQUENCE_BITS.toDouble()) - 1).toInt()
 
-    @Volatile
     private var lastTimestamp = -1L
-    @Volatile
     private var sequence = 0L
 
-    @Synchronized
     override fun generateNextId(): Long {
         var currentTimestamp = timestamp()
 
@@ -39,12 +36,7 @@ class IdGeneratorServiceImpl(
 
         lastTimestamp = currentTimestamp
 
-        return (currentTimestamp shl NODE_ID_BITS + SEQUENCE_BITS)
-            .let {
-                it or (nodeId.value.toLong() shl SEQUENCE_BITS)
-            }.let {
-                it or sequence
-            }
+        return (currentTimestamp shl NODE_ID_BITS + SEQUENCE_BITS) or (nodeId.value.toLong() shl SEQUENCE_BITS) or sequence
     }
 
     private fun timestamp() = Instant.now().toEpochMilli() - CUSTOM_EPOCH
