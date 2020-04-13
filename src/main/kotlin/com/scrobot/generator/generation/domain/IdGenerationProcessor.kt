@@ -1,25 +1,24 @@
-package com.scrobot.generator.domain
+package com.scrobot.generator.generation.domain
 
-import com.scrobot.generator.Constants.CUSTOM_EPOCH
+import com.scrobot.generator.Constants
 import com.scrobot.generator.Constants.NODE_ID_BITS
 import com.scrobot.generator.Constants.SEQUENCE_BITS
-import com.scrobot.generator.entities.NodeId
-import org.springframework.stereotype.Service
+import com.scrobot.generator.nodehelper.entities.NodeId
+import org.springframework.stereotype.Component
 import java.time.Instant
 import kotlin.math.pow
 
-
-@Service
-class IdGeneratorServiceImpl(
+@Component
+class IdGenerationProcessor(
     private val nodeId: NodeId
-) : IdGeneratorService {
+) {
 
-    private val maxSequence = (2.0.pow(SEQUENCE_BITS.toDouble()) - 1).toInt()
+    private val maxSequence = (2.0.pow(Constants.SEQUENCE_BITS.toDouble()) - 1).toInt()
 
     private var lastTimestamp = -1L
     private var sequence = 0L
 
-    override fun generateNextId(): Long {
+    fun generateNextId(): Long {
         var currentTimestamp = timestamp()
 
         check(currentTimestamp >= lastTimestamp) { "Invalid System Clock!" }
@@ -36,10 +35,10 @@ class IdGeneratorServiceImpl(
 
         lastTimestamp = currentTimestamp
 
-        return (currentTimestamp shl NODE_ID_BITS + SEQUENCE_BITS) or (nodeId.value.toLong() shl SEQUENCE_BITS) or sequence
+        return 1 // (currentTimestamp shl NODE_ID_BITS + SEQUENCE_BITS) or (nodeId.value.toLong() shl SEQUENCE_BITS) or sequence
     }
 
-    private fun timestamp() = Instant.now().toEpochMilli() - CUSTOM_EPOCH
+    private fun timestamp() = Instant.now().toEpochMilli() - Constants.CUSTOM_EPOCH
 
     private fun takeNextTimestamp(currentTimestamp: Long): Long {
         var currentTimestamp = currentTimestamp
