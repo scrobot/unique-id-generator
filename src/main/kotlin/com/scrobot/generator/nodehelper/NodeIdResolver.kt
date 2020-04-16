@@ -1,6 +1,6 @@
 package com.scrobot.generator.nodehelper
 
-import com.scrobot.generator.Constants.NODE_ID_BITS
+import com.scrobot.generator.configurations.SnowflakeConfiguration
 import com.scrobot.generator.nodehelper.entities.NodeId
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -11,10 +11,11 @@ import kotlin.random.Random
 @Component
 class NodeIdResolver(
     @Value("\${spring.cloud.consul.discovery.instanceId}")
-    val instanceId: String?
+    val instanceId: String?,
+    config: SnowflakeConfiguration
 ) {
 
-    private val maxNodeId = (2.0.pow(NODE_ID_BITS) - 1).toInt()
+    private val maxNodeId = (2.0.pow(config.nodeIdBits) - 1).toInt()
 
     fun extractNodeId(): Int? = instanceId?.let { id -> id.hashCode() }
 

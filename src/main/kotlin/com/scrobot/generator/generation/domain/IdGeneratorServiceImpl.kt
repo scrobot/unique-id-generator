@@ -1,17 +1,11 @@
 package com.scrobot.generator.generation.domain
 
-import com.scrobot.generator.Constants.CUSTOM_EPOCH
-import com.scrobot.generator.Constants.NODE_ID_BITS
-import com.scrobot.generator.Constants.SEQUENCE_BITS
 import com.scrobot.generator.cache.domain.IdCacheService
-import com.scrobot.generator.nodehelper.entities.NodeId
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
-import java.time.Instant
-import kotlin.math.pow
 
 
 @Service

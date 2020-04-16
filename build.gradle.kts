@@ -37,6 +37,7 @@ dependencies {
 	implementation("io.springfox:springfox-swagger2:3.0.0-SNAPSHOT")
 	implementation("io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT")
 	implementation("io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT")
+	implementation("com.github.ben-manes.caffeine:caffeine:2.8.1")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")

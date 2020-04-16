@@ -1,16 +1,16 @@
 package com.scrobot.generator.cache.data
 
+import com.github.benmanes.caffeine.cache.Cache
 import org.springframework.stereotype.Component
-import java.util.concurrent.ConcurrentHashMap
 
 @Component
-class CacheRepositoryImpl : CacheRepository {
-
-    private val inMemoryCache = ConcurrentHashMap<Long, Boolean>()
+class CacheRepositoryImpl(
+    private val inMemoryCache: Cache<Long, Boolean>
+) : CacheRepository {
 
     override fun putValue(id: Long) {
-        inMemoryCache[id] = true;
+        inMemoryCache.put(id, true)
     }
 
-    override fun checkValueExists(id: Long): Boolean = inMemoryCache[id] != null
+    override fun checkValueExists(id: Long): Boolean = inMemoryCache.getIfPresent(id) ?: false
 }

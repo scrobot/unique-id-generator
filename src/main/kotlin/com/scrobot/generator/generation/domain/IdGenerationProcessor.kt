@@ -1,8 +1,6 @@
 package com.scrobot.generator.generation.domain
 
-import com.scrobot.generator.Constants
-import com.scrobot.generator.Constants.NODE_ID_BITS
-import com.scrobot.generator.Constants.SEQUENCE_BITS
+import com.scrobot.generator.configurations.SnowflakeConfiguration
 import com.scrobot.generator.nodehelper.entities.NodeId
 import org.springframework.stereotype.Component
 import java.time.Instant
@@ -10,10 +8,11 @@ import kotlin.math.pow
 
 @Component
 class IdGenerationProcessor(
+    private val config: SnowflakeConfiguration,
     private val nodeId: NodeId
 ) {
 
-    private val maxSequence = (2.0.pow(Constants.SEQUENCE_BITS.toDouble()) - 1).toInt()
+    private val maxSequence = (2.0.pow(config.sequenceBits.toDouble()) - 1).toInt()
 
     private var lastTimestamp = -1L
     private var sequence = 0L
@@ -35,10 +34,10 @@ class IdGenerationProcessor(
 
         lastTimestamp = currentTimestamp
 
-        return 1 // (currentTimestamp shl NODE_ID_BITS + SEQUENCE_BITS) or (nodeId.value.toLong() shl SEQUENCE_BITS) or sequence
+        return (currentTimestamp shl config.nodeIdBits + config.sequenceBits) or (nodeId.value.toLong() shl config.sequenceBits) or sequence
     }
 
-    private fun timestamp() = Instant.now().toEpochMilli() - Constants.CUSTOM_EPOCH
+    private fun timestamp() = Instant.now().toEpochMilli() - config.customEpoch
 
     private fun takeNextTimestamp(currentTimestamp: Long): Long {
         var currentTimestamp = currentTimestamp

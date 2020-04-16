@@ -12,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
 import reactor.core.publisher.Mono
+import reactor.kotlin.core.publisher.toMono
 import kotlin.random.Random
 
 
@@ -32,7 +33,7 @@ internal class IdGeneratorControllerTest {
     fun `id generation test should be unique`() {
         val value = Random.nextInt() % 2
 
-        Mockito.`when`(service.generateNextId()).thenReturn(value.toLong())
+        Mockito.`when`(service.generateNextId()).thenReturn(value.toLong().toMono())
 
         for (i in 0..10) {
             webClient.get()
@@ -44,7 +45,7 @@ internal class IdGeneratorControllerTest {
 
     @Test
     fun `id generation test should fault with timeout`() {
-        Mockito.`when`(service.generateNextId()).thenReturn(1)
+        Mockito.`when`(service.generateNextId()).thenReturn(1L.toMono())
 
         webClient.get()
             .uri("/api/id")
