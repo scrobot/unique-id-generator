@@ -1,0 +1,30 @@
+version: '3.6'
+
+services:
+
+  idservice:
+    image: scrobot/unique-id-generator:latest
+    ports:
+      - 8080:8080
+    environment:
+      - HOT_CACHE_MAX_SIZE=1000000
+    networks:
+      - back-tier
+
+  consul:
+    image: consul:latest
+    ports:
+      - 8400:8400
+      - 8500:8500
+      - 8600:8600
+    volumes:
+      - consult_data:/consul/config/config.json
+      - consult_data:/consul/data
+    networks:
+      - back-tier
+
+volumes:
+  consult_data: {}
+
+networks:
+  back-tier:
